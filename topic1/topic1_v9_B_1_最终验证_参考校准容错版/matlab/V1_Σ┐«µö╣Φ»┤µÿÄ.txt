@@ -1,0 +1,11 @@
+第九届通达杯赛题一 V1 — 第一轮保守改动
+
+1. 原算法的默认输出不变（allowPbrOnlyOnDisagreement=false），可直接跑原 run_all(3)/run_all(50)。
+2. trials.csv 新增 PhaseCurvature_rad 和 PhaseCurvatureFlag，检测校准后相位的非线性残差。
+   注意：短带宽多径可能仅表现为线性相位偏差；该指标不能保证检测所有多径。
+3. 在 defaultConfig.m 中设 allowPbrOnlyOnDisagreement=true，开启实验性的“RTT/PBR不一致而PBR只有唯一候选”时回退PBR。
+   该开关可能缓解时钟漂移场景，但校准漂移时可能更差；严禁默认用于硬件。
+4. 基线运行：outputs=run_all(50)。实验运行前改开关为true，再运行 outputs=run_all(50)。
+   注意保存基线CSV，否则第二次会覆盖 results/benchmark。
+5. 正式主线改进多径算法前，先用新的相位残差诊断验证回波的可辨识性。
+6. 当前环境未安装MATLAB/Octave，未进行运行验证；需要你用MATLAB R2024b完成测试。

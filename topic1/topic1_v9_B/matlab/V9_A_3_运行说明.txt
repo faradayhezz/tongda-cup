@@ -1,0 +1,13 @@
+V9_A_3 自适应校准与随机跳变验证
+
+1. 在 MATLAB 将当前文件夹设置为本文件所在 matlab 目录。
+2. 快速运行：r = run_v9_A_3_stress(1,20280109);
+3. 完整运行：r = run_v9_A_3_stress(3,20280109);
+4. 输出在 results/v9_A_3_diagnostic/ ：v9_A_3_trials.csv、v9_A_3_summary.csv、v9_A_3_notes.txt。
+
+新增 Adaptive 方法：根据独立参考校准的两次更新趋势之差调节原预测的外推系数。不是卡尔曼滤波，不使用目标真实距离。
+跳变时刻按 episode 随机种子确定在第8至15步，并避免同时与全部校准周期对齐；校准周期仍为2/5/10。
+目标 IQ 使用相同随机种子，对各周期做严格同样本对照；参考 IQ 在同一更新时间也共享随机种子。
+已知局限：在两次参考更新之间，单靠参考创新无法立即观测突然跳变；因此不能承诺检测所有跳变。
+先看 PairedFiniteN、JumpDetectionRows、AdaptiveRMSE_m 和对应 P95；不要只比较总体 RMSE。
+仅仿真，假定理想相干跳频；未计入参考采集耗时，未验证 PlutoSDR 硬件。

@@ -1,0 +1,10 @@
+V9_B_1 修改与运行说明
+=======================
+1. 保留旧 run_v9_B_ablation.m，新增 run_v9_B_1_ablation.m。
+2. 增加 PeriodicNoV8（未经 V8 冲突选择的周期校准输出）、V8、旧 V9_B、V9_B_1 的同 IQ 对照。
+3. 新增 V9_B_1 的证据门限与宽频保护策略：32 MHz 暂不自动采用双径结果；>=48 MHz 时须通过拟合改善、近似 BIC 和最大修正量检查。这是保守实验假设，不是训练得出的普适准则。
+4. 新增 V9B1Reason、V9B1DeltaBIC、V9B1Correction_m，改善/恶化计数只作为离线诊断，不参与在线选择。
+5. 快速：r=run_v9_B_1_ablation(1,20281109);
+   完整：r=run_v9_B_1_ablation(3,20281109);
+6. 输出：results/v9_B_1_ablation/v9_B_1_trials.csv 与 v9_B_1_summary.csv。
+7. 未经 MATLAB 真实执行；先跑快速测试。重要：在新的频点/漂移分布上也需复测，不能仅凭本轮推断可靠性。

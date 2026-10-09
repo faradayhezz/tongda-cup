@@ -1,0 +1,25 @@
+V9_A_1 校准误差定位版
+
+这次发现 V9_A 原仿真中 isCalibration=true 会强制 driftDelayS 和 driftClockBppm 为零。
+这相当于参考测量看不到目标设备发生的硬件漂移，即使每5步更新一次也无从追踪。
+
+修复：simulate.m 增加 scene.referenceTracksDrift 可选字段。true 时：已知距离参考观测也使用当前的硬件延迟和时钟漂移，但仍关闭目标回波；false 时重现旧模型。
+注意：这一修改仅成立于参考链路共享同一套随时间变化的硬件链路时。若参考装置不共享硬件，需要另建可观测的校准模型，不能采用此方案。
+
+MATLAB 当前文件夹进入 topic1_v9_A_1/matlab：
+第一步：run_v9_A_1_sanity(20271119);
+第二步快速测试：r = run_v9_A_1_diagnostic(1,20271119);
+第三步完整测试：r = run_v9_A_1_diagnostic(5,20271119);
+
+若要复现旧错误行为：r = run_v9_A_1_diagnostic(1,20271119,[],false);
+请勿让不同运行写入同一输出目录，否则会覆盖。四参数提供单独目录，如：
+r = run_v9_A_1_diagnostic(1,20271119,fullfile(pwd,'results','legacy_comparison'),false);
+
+产物：results/v9_A_1_sanity/v9_A_1_sanity.csv；
+results/v9_A_1_diagnostic/v9_A_1_trials.csv、v9_A_1_summary.csv、v9_A_1_notes.txt。
+
+新增列 TrueDriftDelay_ns、TrueDriftClock_ppm 仅记录仿真真值，绝不传入在线校准/估计决策；
+还包括参考 RTT 偏置、PBR 相位偏置斜率、原始 RTT、校准后 RTT/PBR、融合前与最终结果。
+相位斜率是展开相位的线性诊断指标，并非唯一无模糊距离真值。
+
+注意：原模型仍假设理想相干跳频，未验证 PlutoSDR；V9_A 的新输出变化需要 MATLAB 实测确认。

@@ -1,0 +1,17 @@
+通达杯赛题一 V3：自适应双径筛选实验版
+
+新增文件：+td1/selectTwoPathV3.m、run_v3_probe.m。
+保留原 run_all、td1.estimate 主流程；新策略只用于 V3 对照输出。
+
+在 MATLAB 进入 topic1_v3/matlab 后运行：
+  comparison = run_v3_probe(3,20261109);
+验证正常后运行：
+  comparison = run_v3_probe(50,20261109);
+结果在 results/v3_probe/v3_trials.csv 与 v3_summary.csv。
+第二次运行会覆盖同名输出，请留意备份快速版结果。
+
+选择条件：拟合残差相对改善 >60%；回波幅度 >0.08；额外延迟 8~90 ns；距离修正幅度不超过2.5米；基线 PBR 及候选有效。
+此选择器不得访问真实距离和设定 SNR；场景名称仅用于事后统计。
+
+阈值来自先前 V2 144 样本探索，不算独立验证。20261109 是与旧实验不同的随机种子，但场景模型参数仍相同，后续仍需新增反射参数随机化与硬件试验。
+当前环境没有 MATLAB/Octave，尚未执行数值仿真。软件构建检查不等于 MATLAB 运行成功。

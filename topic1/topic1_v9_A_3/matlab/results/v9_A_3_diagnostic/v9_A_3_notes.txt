@@ -1,0 +1,12 @@
+Seed=20280109, episodes=1, target records=2400.
+Known-reference update periods: 2,5,10 time steps; 8 captures per update.
+Fixed = t1 reference; Periodic = latest reference; Predicted = reference-history extrapolation.
+Drift profiles: linear, quadratic, randomized step jump; stable control; noisy reference at SNR-20 dB.
+Randomized jump time between steps 8 and 15, never aligned with all update periods.
+Reference and target observations use per-time independent deterministic RNG seeds shared across update periods.
+Adaptive gate uses only successive known-reference calibration innovations; no simulator truth.
+Drift amplitudes only configure simulator, NEVER estimator, predictor, or selector.
+Target IQ shared across ALL four methods AND update periods for matched scenario/time/episode.
+Reference overhead excluded from RMSE; inspect ReferenceUpdateRows when comparing periods.
+Ideal coherent frequency retuning, software simulation, not PlutoSDR validation.
+NaN errors excluded from paired metrics: check PairedFiniteN.

@@ -1,0 +1,6 @@
+验证脚本修复说明（仅修改 validate_v9_A_3_1.m）
+1. TrueJump / TrueJumpActive 从CSV读入可能是0/1 double，作为数组索引前统一转换 logical。
+2. 同时修复漂移时钟和延迟的前/后跳变索引，补充数值检查。
+3. 主仿真代码没有修改，无需重新生成结果。
+运行：validate_v9_A_3_1;
+如果有独立CSV：validate_v9_A_3_1(完整CSV路径);

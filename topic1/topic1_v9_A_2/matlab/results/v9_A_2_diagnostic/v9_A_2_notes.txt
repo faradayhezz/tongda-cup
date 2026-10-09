@@ -1,0 +1,9 @@
+Seed=20271209, episodes=2, target records=4800.
+Known-reference update periods: 2,5,10 time steps; 8 captures per update.
+Fixed = t1 reference; Periodic = latest reference; Predicted = reference-history extrapolation.
+Drift profiles: linear, quadratic, step jump; stable control; noisy reference at SNR-20 dB.
+Drift amplitudes only configure simulator, NEVER estimator, predictor, or selector.
+Target IQ shared ACROSS METHODS within each scenario/period; different update periods use independent RNG streams.
+Reference overhead excluded from RMSE; inspect ReferenceUpdateRows when comparing periods.
+Ideal coherent frequency retuning, software simulation, not PlutoSDR validation.
+NaN errors excluded from paired metrics: check PairedFiniteN.

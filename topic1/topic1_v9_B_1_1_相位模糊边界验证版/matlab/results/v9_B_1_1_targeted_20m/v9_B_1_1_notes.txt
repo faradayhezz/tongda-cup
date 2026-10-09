@@ -1,0 +1,8 @@
+V9_B_1_1 boundary verification; seed 20281209; episodes 1; observations 960; search max 20.0 m; mode targeted.
+Strategies: Fixed reference; Periodic calibration; V8; V3; V7; combined V9_B.
+V3/V7 use the same periodic calibration as V8; ALL share target IQ.
+V9_B first preserves accepted V8 PBR conflict switch; otherwise tries V7, V3, baseline.
+V9_B is not yet a proven optimal joint fusion method; no truth in online decision.
+Known reference for calibration; ideal coherent retuning; no PlutoSDR tests.
+Mode targeted, 4 conditions, 2 spans, 3 distances, 4 SNR, 10 time steps.
+PairedFiniteN counts rows with finite errors across six comparison outputs.
