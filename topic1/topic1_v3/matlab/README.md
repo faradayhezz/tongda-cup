@@ -6,7 +6,7 @@
 
 已在 **MATLAB R2023a** 验证，只使用基础 MATLAB 函数。无需 Bluetooth、Communications、Signal Processing 或 Statistics Toolbox，无需 SDR 硬件。R2018b 尚未实机验证。
 
-克隆仓库后，将 MATLAB 当前文件夹切换到 `topic1/matlab` 目录，再运行：
+克隆仓库后，将 MATLAB 当前文件夹切换到 `topic1/topic1_v3/matlab` 目录，再运行：
 
 ```matlab
 outputs = run_all;
@@ -30,7 +30,9 @@ outputs = run_all;
 | `reference_results/` | 已验证的逐次试验、汇总、诊断、图与运行记录 |
 | `results/` | 本机重跑生成的文件，已加入 Git 忽略规则 |
 
-## 已验证结果
+## 原始基线参考结果
+
+下列 `reference_results/` 是原始 `topic1/matlab` 基线的副本，不能作为本版本新增实验模块的验证结果。原始校验清单描述旧基线源码，部分 SHA 与本版本不同是预期现象；本次 PR 的独立审核记录见 [审核记录](../../review_20261009/REVIEW.txt)。
 
 2026年10月9日，MATLAB `9.14.0.2206163 (R2023a)` 完整运行通过：
 

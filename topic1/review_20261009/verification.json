@@ -1,0 +1,130 @@
+{
+  "Date": "2026-10-09",
+  "MatlabVersion": "R2023a",
+  "UploadCommitReviewed": "323fb9d9fb9355e1eb4d209e1e62c91fbb19fe5d",
+  "V1Status": "Awaiting teammate upload; excluded from approval",
+  "VersionTests": [
+    {
+      "Version": "topic1_v2",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    },
+    {
+      "Version": "topic1_v3",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    },
+    {
+      "Version": "topic1_v4",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    },
+    {
+      "Version": "topic1_v5",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    },
+    {
+      "Version": "topic1_v6",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    },
+    {
+      "Version": "topic1_v7",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    },
+    {
+      "Version": "topic1_v8",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    },
+    {
+      "Version": "topic1_v8_1",
+      "Passed": true,
+      "Tests": 10,
+      "MatlabVersion": "9.14.0.2206163 (R2023a)",
+      "ErrorID": "",
+      "Error": ""
+    }
+  ],
+  "PolicyTests": 8,
+  "StaticFiles": 31,
+  "StaticDiagnostics": 0,
+  "BenchmarkPackets": 7200,
+  "SensitivityPackets": 540,
+  "IndependentPairedPackets": 7200,
+  "MultipathPackets": 1920,
+  "GatePackets": 144,
+  "ComparisonPackets": 864,
+  "EntrySmoke": [
+    {
+      "Version": "topic1_v2",
+      "EntryPoint": "run_v2_probe",
+      "Passed": true,
+      "Rows": 48
+    },
+    {
+      "Version": "topic1_v3",
+      "EntryPoint": "run_v3_probe",
+      "Passed": true,
+      "Rows": 48
+    },
+    {
+      "Version": "topic1_v4",
+      "EntryPoint": "run_v4_probe",
+      "Passed": true,
+      "Rows": 48
+    },
+    {
+      "Version": "topic1_v6",
+      "EntryPoint": "run_v6_frequency_study",
+      "Passed": true,
+      "Rows": 96
+    },
+    {
+      "Version": "topic1_v7",
+      "EntryPoint": "run_v7_diagnostic",
+      "Passed": true,
+      "Rows": 96
+    },
+    {
+      "Version": "topic1_v8",
+      "EntryPoint": "run_v8_regression",
+      "Passed": true,
+      "Rows": 144
+    }
+  ],
+  "CaptureIO": {
+    "Passed": true,
+    "Range_m": 7.3210017943836325,
+    "AbsoluteError_m": 1.7943836327916074e-06,
+    "Status": "single_alias_soft_fusion"
+  },
+  "TotalMonteCarloPackets": 18348,
+  "IndependentStatisticsRecomputed": true,
+  "PairedSeed": 202610091,
+  "MultipathSeed": 202610092,
+  "GateSeed": 202610093
+}

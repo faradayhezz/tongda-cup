@@ -6,7 +6,7 @@ R2018b 已有语法，但尚未在 R2018b 运行。无需 Bluetooth、Communicat
 Signal Processing 或 Statistics Toolbox，无需 SDR。全部输出为 Simulation only。
 
 一键运行
-1. MATLAB 当前文件夹切换到本 README 所在目录（仓库中为 topic1/matlab）。
+1. MATLAB 当前文件夹切换到本 README 所在目录（仓库中为 topic1/topic1_v7/matlab）。
 2. 输入 outputs = run_all;
    默认每个距离/SNR/场景测试 50 次，并执行自检与独立参数敏感性分析。
    快速集成检查可用 outputs = run_all(3);
@@ -93,3 +93,8 @@ checkcode.json与reference_results/full_run.log。这些记录只证明声明仿
 
 GitHub布局说明
 已验证CSV、PNG与校验记录存放在reference_results/；程序运行生成results/（已忽略）。大型results.mat重跑生成，不进入Git历史。
+
+审核补充 2026年10月9日
+reference_results是原始基线副本，并非本版本新增实验的测试证据。
+独立审核见topic1/review_20261009；输出类型新增OutputMode与PBRFallbackRate，PBR单独回退不再计作RTT回退。
+run_compare_v1现在直接成对运行默认与实验分支，不需要修改共享配置文件。

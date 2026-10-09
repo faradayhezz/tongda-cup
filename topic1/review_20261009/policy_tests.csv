@@ -1,0 +1,9 @@
+Name,Pass,Detail
+Eligible conflict,1,"Unique valid phase candidate accepted"
+Conflict safety guards,1,"Invalid, ambiguous, small, unavailable and wrong status rejected"
+Conflict coherence boundaries,1,"Experimental interval is restricted"
+Two path correction bound,1,"Large correction rejected by V3"
+Rescue restrictions,1,"V7 rescue and rejected high amplitude"
+Clock drift opt in and accounting,1,"Physical PBR-only fallback is separate from RTT"
+Shared delay negative control,1,"Expected limitation: both methods share hidden range bias"
+Single path optimizer reference,1,"24 independent candidate comparisons"
