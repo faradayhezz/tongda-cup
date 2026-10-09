@@ -1,0 +1,11 @@
+Name,Pass,Detail
+Noiseless fractional range,1,"0, 1, 2.718, 19.234, 40 m including boundaries"
+Unknown common phase invariance,1,"PBR/fusion unaffected"
+Independent unwrap regression,1,"Cross-check coherent search"
+CFO clock and reference calibration,1,"Independent IQ CFO and known range"
+Sparse phase ambiguity,1,"18.737 m period; RTT selects true branch"
+Biased RTT negative control,1,"Wrong alias or explicit fallback"
+Inconsistent phase rejection,1,"Quality failure is explicit"
+Missing sync rejection,1,"No high confidence range without sync"
+CFO capture limit,1,"120 kHz exceeds configured 80 kHz"
+Receiver truth isolation,1,"Only design fields cross the interface"

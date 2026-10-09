@@ -1,0 +1,8 @@
+Seed 20270409, repeats 20, records 1920.
+All plans 17 tones; RF retuning/phase calibration assumed idealized by simulator.
+V3 thresholds reused as-is, NOT optimized for new frequency patterns.
+NaN candidate estimates are excluded by localRmse; count finite values before interpreting.
+B*tau is only a dimensionless sensitivity indicator, NOT an identifiability guarantee.
+V8 is EXPERIMENTAL; phase-coherence gating is NOT a calibrated multipath test.
+V8 coherence thresholds were explored on earlier V7 records; independent test seed required.
+Per-scene calibration is simulated; hardware drift is not validated.

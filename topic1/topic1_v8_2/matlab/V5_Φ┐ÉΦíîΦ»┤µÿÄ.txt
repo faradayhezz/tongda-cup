@@ -1,0 +1,22 @@
+通达杯赛题一 V5 实验版（中文说明）
+
+新增：+td1/selectTwoPathV5.m；run_v5_probe.m。
+V3 和 V4 原代码及主 run_all 不变。
+
+运行 MATLAB，当前文件夹设置为本压缩包的 matlab 文件夹：
+  comparison = run_v5_probe(3,20270109);   % 快速检查：144 条
+  comparison = run_v5_probe(50,20270109);  % 全量验证：2400 条
+生成 results/v5_probe/v5_trials.csv 和 v5_summary.csv。
+
+模型选择思路：
+1. V3 门限先筛掉明显不合格候选。
+2. 使用单径/双径拟合损失构建近似 BIC 差值，惩罚双径增加的3个参数。
+3. V4 的奇偶频点差异不再用于硬性否决，仅作为连续折扣。
+4. 通过可信度权重对双径距离修正进行软加权，而非全部采用。
+
+注意：BIC 是对相位损失的近似准则，不是严格似然模型。可信度也不是经标定的概率。
+17 个频点仅16MHz跨度，短延迟双径存在不可辨识问题；本方案属于对照实验，不保证优于 V3。
+不要拿本次验证数据继续选阈值后又用同一份数据报告泛化提升。
+没有 MATLAB/PlutoSDR 运行验证前，不宣称已满足竞赛实测要求。
+
+重点字段：V5BicGain、V5SplitRange_m、V5Confidence、V5Weight、V5Reason。

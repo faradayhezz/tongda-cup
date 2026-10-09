@@ -1,0 +1,41 @@
+                     Name                      Pass                           Detail
+    _______________________________________    _____    __________________________________________________
+
+    {'Noiseless fractional range'         }    true     {'0, 1, 2.718, 19.234, 40 m including boundaries'}
+    {'Unknown common phase invariance'    }    true     {'PBR/fusion unaffected'                         }
+    {'Independent unwrap regression'      }    true     {'Cross-check coherent search'                   }
+    {'CFO clock and reference calibration'}    true     {'Independent IQ CFO and known range'            }
+    {'Sparse phase ambiguity'             }    true     {'18.737 m period; RTT selects true branch'      }
+    {'Biased RTT negative control'        }    true     {'Wrong alias or explicit fallback'              }
+    {'Inconsistent phase rejection'       }    true     {'Quality failure is explicit'                   }
+    {'Missing sync rejection'             }    true     {'No high confidence range without sync'         }
+    {'CFO capture limit'                  }    true     {'120 kHz exceeds configured 80 kHz'             }
+    {'Receiver truth isolation'           }    true     {'Only design fields cross the interface'        }
+
+PASS: 10 meaningful tests.
+Completed LOS (50 trials per distance/SNR).
+Completed CFO_clock (50 trials per distance/SNR).
+Completed Light_multipath (50 trials per distance/SNR).
+Completed Sparse_alias (50 trials per distance/SNR).
+Completed Calibration_drift (50 trials per distance/SNR).
+Completed Random_hop_phase (50 trials per distance/SNR).
+Simulation only: 7200 test packets, 720 summary rows, 23.7 s.
+Saved to <local results/benchmark>
+Completed sensitivity: CFO_Hz.
+Completed sensitivity: PhaseNoise_rad.
+Completed sensitivity: EchoAmplitude.
+Completed sensitivity: ClockB_Drift_ppm.
+Completed sensitivity: DelayDrift_ns.
+Simulation only: 540 sensitivity packets.
+              MatlabVersion: '9.14.0.2206163 (R2023a)'
+             SimulationOnly: 1
+                  SelfTests: 10
+            SelfTestsPassed: 1
+                TestPackets: 7200
+                SummaryRows: 720
+         SensitivityPackets: 540
+       TrialsPerDistanceSnr: 50
+                       Seed: 20261008
+    BenchmarkElapsedSeconds: 23.7408
+
+All source files passed checkcode.
