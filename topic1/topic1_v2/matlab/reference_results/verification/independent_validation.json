@@ -1,0 +1,11 @@
+{
+  "TestRows": 7200,
+  "UniqueTestKeys": 7200,
+  "SummaryRowsRecomputed": 720,
+  "SensitivityRows": 540,
+  "SelfTestsPassed": 10,
+  "CodeAnalyzerDiagnostics": 0,
+  "OriginalHandoffFilesUnchanged": 16,
+  "RatePartitionsChecked": 51,
+  "AllChecksPassed": true
+}

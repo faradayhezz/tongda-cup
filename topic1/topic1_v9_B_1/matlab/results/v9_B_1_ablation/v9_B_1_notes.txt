@@ -1,0 +1,7 @@
+V9_B_1 experimental ablation; seed 20281109; episodes 3; observations 3360.
+Strategies: Fixed reference; Periodic calibration; V8; V3; V7; combined V9_B.
+V3/V7 use the same periodic calibration as V8; ALL share target IQ.
+V9_B first preserves accepted V8 PBR conflict switch; otherwise tries V7, V3, baseline.
+V9_B is not yet a proven optimal joint fusion method; no truth in online decision.
+Known reference for calibration; ideal coherent retuning; no PlutoSDR tests.
+PairedFiniteN counts rows with finite errors across six comparison outputs.

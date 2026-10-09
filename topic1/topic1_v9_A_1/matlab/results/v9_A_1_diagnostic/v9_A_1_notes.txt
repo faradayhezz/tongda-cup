@@ -1,0 +1,8 @@
+Seed=20271119, episodes=5, target records=4800.
+Known-reference updates every 5 time steps with 8 independent IQ captures.
+Fixed = t1 reference; Periodic = latest reference; Predicted = reference-history extrapolation.
+Drift is linear within episode; prediction may be favored by this fixture.
+Drift amplitudes only configure simulator, NEVER estimator, predictor, or selector.
+Shared target IQ across methods; reference overhead excluded from RMSE.
+Ideal coherent frequency retuning, software simulation, not PlutoSDR validation.
+NaN errors excluded from paired metrics: check PairedFiniteN.

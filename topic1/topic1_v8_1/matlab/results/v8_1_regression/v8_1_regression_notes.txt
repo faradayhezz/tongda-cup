@@ -1,0 +1,6 @@
+Experimental six-scene regression; seed 20271009, repeats 50, observations 7200.
+Same simulated IQ/features for original estimator and V8 switch.
+SNR per scene calibration assumes known reference distance; no hardware validation.
+V8 switch uses only receiver estimates, never scenario label or true distance.
+Check Calibration_drift, Sparse_alias, Random_hop_phase first.
+RMSE excludes nonfinite values; inspect FiniteN before comparing.

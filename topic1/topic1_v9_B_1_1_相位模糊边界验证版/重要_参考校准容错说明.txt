@@ -1,0 +1,7 @@
+修复范围：仅 run_v9_B_1_final_verify.m 以及 validate_v9_B_1_final.m。
+
+原因：td1.calibrate 至少需要两组同步和相位均有效的独立参考采集。noisy_reference 在目标0 dB时参考为-20 dB，可能8组全部失效。
+处理：先在原定参考SNR采集8组，仅有效样本进入校准。如果周期更新失败，则保留上一次有效校准并标记 update_failed_hold_previous。如果首次初始化失败，则使用20dB已知距离参考进行显式增强校准，并标记 bootstrap_20dB，记录 ReferenceCalUsedSNR_dB。不会伪装成原SNR成功。
+注意：增强参考采集是改变参考链路实验条件，不能把该场景与纯-20 dB参考校准成绩等同，也不能据此宣称低SNR参考自身具备可用性。首次参考失败也可以采用更严格的拒绝输出设计，但本次为了完成全距离测试采用有记录的辅助初始化。
+运行：r=run_v9_B_1_final_verify(1,20281209); validate_v9_B_1_final;
+MATLAB数值运行尚未在当前环境验证。

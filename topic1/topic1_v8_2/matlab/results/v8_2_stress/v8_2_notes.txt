@@ -1,0 +1,7 @@
+Seed=20271019; repeats=20; total trials=1680.
+Two tone spans 32/64 MHz; seven combined cases, 3 SNR, 2 distances.
+Original vs V8 share IQ and calibration samples, unchanged V8 selection rule.
+Calibration performed before post-cal drift; no hardware measurement.
+Simulation assumes ideal coherent retuning; phase-drift fixture is deterministic.
+SwitchBetterCount and SwitchWorseCount are offline evaluations ONLY.
+RMSE excludes NaN: compare PairedFiniteN; calibration is scene-specific.

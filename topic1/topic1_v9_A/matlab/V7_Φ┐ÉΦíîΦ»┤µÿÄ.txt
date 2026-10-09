@@ -1,0 +1,20 @@
+V7 强反射误差诊断与候选策略对照（中文说明）
+
+本工程保留 V6，新增 +td1/selectTwoPathV7.m 和 run_v7_diagnostic.m。
+重点记录 RTT / PBR / 原融合 / V2 / V3 / V7 同一观测下的差异。
+V7 是试验策略：V3 候选增加复杂度惩罚；对少数被 V3 因修正过大拒绝、却有较强双径证据的候选，允许“强回波救援”。不保证改善，特别关注 LOS 假阳性。
+
+进入 matlab 文件夹，先运行：
+  result=run_v7_diagnostic(2,20270309);
+然后正式运行：
+  result=run_v7_diagnostic(20,20270309);
+
+输出位置：results/v7_diagnostic/
+  v7_summary.csv
+  v7_trials.csv
+  v7_experiment_notes.txt
+
+正式初步测试共 1920 次，4 种频点布局×4 个场景×3 SNR×2 距离×20 重复。
+原有 60 ns 强反射可能来自相位分支/候选范围/多径模型辨识共同作用，不可将 BIC 视为真实路径证明。
+要求：核对 V7RescueCount，LOS 大误差，60 ns 的 V7 RMSE 与超 1m 比率，并与同一样本 V3 比较。
+说明：新种子不等于新增信道多样性。本版本仍使用理想跨频相位校准和固定反射相位。未进行 MATLAB 运行验证。硬件实测与协议实现均未完成。

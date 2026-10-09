@@ -19,3 +19,12 @@ cd tongda-cup
 4. 邀请队友审阅，通过后合并到 `main`。
 
 每次提交聚焦一个明确的修改。密钥和本地环境配置应保存在忽略的 `.env` 文件中；需要共享配置格式时，使用不含密钥的 `.env.example`。
+
+## 题1代码与审核
+
+[代码入口](topic1/README.md) · [最终审核记录](topic1/review_20261009/FINAL_REVIEW.txt)
+
+## 贡献者
+
+- [faradayhezz](https://github.com/faradayhezz)
+- [Whistchick](https://github.com/Whistchick)
