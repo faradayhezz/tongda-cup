@@ -33,7 +33,7 @@ row=struct('Plan','','Condition','','Distance_m',NaN,'SNR_dB',NaN,'Trial',NaN,'S
  'OriginalStatus','','PBRValid',false,'PBRCoherence',NaN,'PBRAmbiguous',false,...
  'AliasCount',NaN,'InnovationSigma',NaN,'V8UsePbr',false,'V8Reason','');
 rows=repmat(row,N,1);
-oldRng=rng; restoreRng=onCleanup(@()rng(oldRng)); %#ok<NASGU>
+oldRng=rng; restoreRng=onCleanup(@()rng(oldRng));
 idx=0;
 for pi=1:numel(plans)
  plan=plans{pi};

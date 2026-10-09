@@ -22,7 +22,7 @@ values={[-120e3 -40e3 0 12e3 40e3 120e3],[0 .05 .15 .35 .7], ...
     [0 .1 .25 .5 .8],[0 10 30 60 150 300],[0 4 8 16 32]};
 template=struct('Parameter','','Value',0,'Trial',0,'TrueDistance_m',10, ...
     'RTT_m',NaN,'PBR_m',NaN,'Fused_m',NaN,'CFOEstimate_Hz',NaN, ...
-    'PBR_Usable',false,'FusionValid',false,'Status','');
+    'PBR_Usable',false,'FusionValid',false,'Status','','OutputMode','');
 count=sum(cellfun(@numel,values))*nTrials;records=repmat(template,count,1);row=0;
 for g=1:numel(groups)
     for v=1:numel(values{g})
@@ -44,7 +44,7 @@ for g=1:numel(groups)
             row=row+1;r=template;r.Parameter=groups{g};r.Value=value;r.Trial=k;
             r.RTT_m=est.rttM;r.PBR_m=est.pbrM;r.Fused_m=est.fusedM;
             r.CFOEstimate_Hz=feat.cfoPairHz;r.PBR_Usable=est.pbrValid;
-            r.FusionValid=est.fusionValid;r.Status=est.status;
+            r.FusionValid=est.fusionValid;r.Status=est.status;r.OutputMode=td1.outputMode(est);
             records(row)=r;
         end
     end
@@ -53,7 +53,7 @@ end
 trials=struct2table(records);
 prototype=struct('Parameter','','Value',0,'N',0,'FiniteN',0,'PBRUsableN',0, ...
     'RTT_RMSE_m',NaN,'PBR_RMSE_m',NaN,'Fused_RMSE_m',NaN, ...
-    'FusionAcceptedRate',0,'RTTFallbackRate',0,'UnavailableRate',0);
+    'FusionAcceptedRate',0,'RTTFallbackRate',0,'PBRFallbackRate',0,'UnavailableRate',0);
 summaryRecords=repmat(prototype,sum(cellfun(@numel,values)),1);row=0;
 for g=1:numel(groups)
     for v=1:numel(values{g})
@@ -65,7 +65,8 @@ for g=1:numel(groups)
         s.PBR_RMSE_m=finiteRmse(trials.PBR_m(selected)-10);
         s.Fused_RMSE_m=finiteRmse(trials.Fused_m(selected)-10);
         s.FusionAcceptedRate=mean(trials.FusionValid(selected));
-        s.RTTFallbackRate=mean(~trials.FusionValid(selected) & isfinite(trials.Fused_m(selected)));
+        s.RTTFallbackRate=mean(strcmp(trials.OutputMode(selected),'rtt_only'));
+        s.PBRFallbackRate=mean(strcmp(trials.OutputMode(selected),'pbr_only'));
         s.UnavailableRate=mean(~isfinite(trials.Fused_m(selected)));summaryRecords(row)=s;
     end
 end

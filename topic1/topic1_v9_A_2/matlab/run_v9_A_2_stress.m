@@ -40,7 +40,7 @@ proto=struct('Plan','','Condition','','SNR_dB',NaN,'Distance_m',NaN,...
  'FixedBase_m',NaN,'PeriodicBase_m',NaN,'PredictedBase_m',NaN, ...
  'ReferenceTracksDrift',false);
 rows=repmat(proto,N,1);ix=0;
-oldRng=rng;clean=onCleanup(@()rng(oldRng)); %#ok<NASGU>
+oldRng=rng;clean=onCleanup(@()rng(oldRng));
 for pi=1:numel(plans)
  plan=plans{pi};
  for ci=1:numel(conditions)

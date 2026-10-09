@@ -7,6 +7,10 @@ f20=fullfile(root,'results',sprintf('v9_B_1_1_%s_20m',mode),'v9_B_1_1_trials.csv
 assert(exist(f40,'file')==2 && exist(f20,'file')==2,'Run BOTH 40m and 20m versions first.');
 a=readtable(f40); b=readtable(f20);
 assert(height(a)==height(b),'Unequal row count');
+if ismember('Seed',a.Properties.VariableNames) && ismember('Seed',b.Properties.VariableNames)
+ assert(isequal(a.Seed,b.Seed),'Paired comparison requires identical random seeds.');
+end
+assert(all(abs(a.RawRtt_m-b.RawRtt_m)<1e-8),'Raw observations differ; these are not paired runs.');
 assert(isequal(a.Plan,b.Plan) && isequal(a.Condition,b.Condition) && ...
  isequal(a.SNR_dB,b.SNR_dB) && isequal(a.Distance_m,b.Distance_m) && ...
  isequal(a.Episode,b.Episode) && isequal(a.TimeStep,b.TimeStep), ...

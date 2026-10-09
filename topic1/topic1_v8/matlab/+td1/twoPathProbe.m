@@ -6,7 +6,8 @@ function probe = twoPathProbe(feat,cal,cfg,baseline)
 probe=struct('candidateM',NaN,'excessDelayNs',NaN,'echoAmplitude',NaN, ...
     'echoPhaseRad',NaN,'singleCost',NaN,'twoPathCost',NaN, ...
     'relativeImprovement',NaN,'distanceShiftM',NaN, ...
-    'eligible',false,'reason','not_evaluated');
+    'eligible',false,'reason','not_evaluated', ...
+    'coarseStartCount',0,'validCoarseStartCount',0);
 if ~baseline.pbrValid || ~isfinite(baseline.fusedM) || ...
         numel(cfg.fHz)<8 || ~all(isfinite(feat.phaseRad(:)))
     probe.reason='unreliable_inputs';return;
@@ -33,15 +34,17 @@ single=@(d) metric(exp(-1i*4*pi*x*d/cfg.c));
 % finite multistart; fit 4 physical parameters [d, tau_ns, amplitude, phase].
 % For performance, first coarse search then refine only 2 best starts.
 starts=[];scores=[];
-for tau=[10 25 50 80]
+for delayStartNs=[10 25 50 80]
     for amp=[0.15 0.35]
         for phi=[-pi 0 pi]
-            p=[d0 tau amp phi];
+            p=[d0 delayStartNs amp phi];
             scores(end+1)=loss(p); %#ok<AGROW>
             starts(end+1,:)=p; %#ok<AGROW>
         end
     end
 end
+probe.coarseStartCount=size(starts,1);
+probe.validCoarseStartCount=sum(isfinite(scores) & scores<10);
 [~,idx]=sort(scores);
 best=inf; pbest=[];
 for j=1:min(3,numel(idx))
@@ -67,12 +70,12 @@ else
     probe.reason='weak_or_boundary_solution';
 end
     function value=loss(p)
-        d=p(1);tau=p(2)*1e-9;a=p(3)*exp(1i*p(4));
-        if any(~isfinite(p)) || d<lo || d>hi || tau<5e-9 || ...
-                tau>100e-9 || p(3)<0 || p(3)>0.7
+        d=p(1);delayS=p(2)*1e-9;a=p(3)*exp(1i*p(4));
+        if any(~isfinite(p)) || d<lo || d>hi || delayS<5e-9 || ...
+                delayS>100e-9 || p(3)<0 || p(3)>0.7
             value=10+sum(abs(p(isfinite(p))));return;
         end
-        h=1+a*exp(-1i*2*pi*x*tau);
+        h=1+a*exp(-1i*2*pi*x*delayS);
         model=exp(-1i*4*pi*x*d/cfg.c).*h.^2;
         value=metric(model);
     end

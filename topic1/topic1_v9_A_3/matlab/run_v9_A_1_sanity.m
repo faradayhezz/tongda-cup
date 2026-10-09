@@ -2,7 +2,7 @@ function result = run_v9_A_1_sanity(seed)
 % Minimal controlled calibration test: no echo, high SNR, two target ranges.
 % Reference distance is known; target distance is used ONLY for scoring.
 if nargin<1,seed=20271119;end
-oldRng=rng;restore=onCleanup(@()rng(oldRng)); %#ok<NASGU>
+oldRng=rng;restore=onCleanup(@()rng(oldRng));
 rng(seed,'twister');
 cfg=td1.defaultConfig();
 scene=cfg.scenarios(1);scene.name='LOS_calibration_unit_test';

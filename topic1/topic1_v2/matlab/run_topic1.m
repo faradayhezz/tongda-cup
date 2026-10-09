@@ -1,4 +1,4 @@
-function results = run_topic1(outDir, nTrials)
+function results = run_topic1(outDir, nTrials, options)
 %RUN_TOPIC1 Reproducible waveform-level ranging benchmark. Simulation only.
 %   results = run_topic1;
 %   results = run_topic1(fullfile(pwd,'results','quick'), 3);
@@ -10,6 +10,17 @@ if nargin < 1 || isempty(outDir)
     outDir = fullfile(baseDir, 'results', 'benchmark');
 end
 cfg = td1.defaultConfig();
+if nargin >= 3 && ~isempty(options)
+    if ~isstruct(options) || ~isscalar(options) || ...
+            any(~ismember(fieldnames(options),{'allowPbrOnlyOnDisagreement'}))
+        error('td1:RunnerOptions','Only allowPbrOnlyOnDisagreement is supported.');
+    end
+    if isfield(options,'allowPbrOnlyOnDisagreement')
+        validateattributes(options.allowPbrOnlyOnDisagreement, ...
+            {'logical','numeric'},{'scalar','real','binary'});
+        cfg.allowPbrOnlyOnDisagreement=logical(options.allowPbrOnlyOnDisagreement);
+    end
+end
 if nargin >= 2 && ~isempty(nTrials)
     validateattributes(nTrials, {'numeric'}, {'scalar','integer','positive','finite'});
     cfg.nTrials = nTrials;
@@ -69,6 +80,7 @@ for s = 1:numel(cfg.scenarios)
                 record.PBR_Usable = est.pbrValid;
                 record.FusionValid = est.fusionValid;
                 record.Status = est.status;
+                record.OutputMode = td1.outputMode(est);
                 record.InnovationSigma = est.innovationSigma;
                 record.PhaseCurvature_rad = est.phaseCurvatureRad;
                 record.PhaseCurvatureFlag = est.phaseCurvatureFlag;
@@ -113,7 +125,7 @@ record = struct('Scenario','','TrueDistance_m',0,'SNR_dB',0,'Trial',0, ...
     'Raw_RTT_m',NaN,'Calibrated_RTT_m',NaN,'Raw_PBR_m',NaN, ...
     'Calibrated_PBR_m',NaN,'Fused_m',NaN,'CFO_Hz',NaN, ...
     'PBR_Coherence',NaN,'PBR_Ambiguous',false,'PBR_Usable',false,'FusionValid',false, ...
-    'Status','','InnovationSigma',NaN,'EstimatorSeconds',NaN, ...
+    'Status','','OutputMode','','InnovationSigma',NaN,'EstimatorSeconds',NaN, ...
     'FusionWorseThanPBR',NaN,'AliasBranchWrong',NaN, ...
     'PhaseCurvature_rad',NaN,'PhaseCurvatureFlag',false);
 end
@@ -164,7 +176,7 @@ end
 
 function diagnostics = diagnosticSummary(trials,cfg)
 template=struct('Scenario','','SNR_dB',0,'N',0,'FusionAcceptedRate',0, ...
-    'RTTFallbackRate',0,'UnavailableRate',0,'PBRUsableRate',0, ...
+    'RTTFallbackRate',0,'PBRFallbackRate',0,'UnavailableRate',0,'PBRUsableRate',0, ...
     'ComparedN',0,'FusionWorseThanPBRRate',NaN,'AliasDecisionN',0,'AliasBranchWrongRate',NaN, ...
     'MedianEstimator_ms',0,'MeanPBRCoherence',0);
 records=repmat(template,numel(cfg.scenarios)*numel(cfg.snrDb),1); row=0;
@@ -175,7 +187,8 @@ for s=1:numel(cfg.scenarios)
         record=template; record.Scenario=cfg.scenarios(s).name;
         record.SNR_dB=cfg.snrDb(z); record.N=sum(select);
         record.FusionAcceptedRate=mean(trials.FusionValid(select));
-        record.RTTFallbackRate=mean(~trials.FusionValid(select) & isfinite(trials.Fused_m(select)));
+        record.RTTFallbackRate=mean(strcmp(trials.OutputMode(select),'rtt_only'));
+        record.PBRFallbackRate=mean(strcmp(trials.OutputMode(select),'pbr_only'));
         record.UnavailableRate=mean(~isfinite(trials.Fused_m(select)));
         record.PBRUsableRate=mean(trials.PBR_Usable(select));
         compared=trials.FusionWorseThanPBR(select);compared=compared(isfinite(compared));

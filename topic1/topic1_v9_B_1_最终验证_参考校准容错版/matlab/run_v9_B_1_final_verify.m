@@ -28,7 +28,7 @@ conditions={ ...
 snrs=[0 10 20 30];distances=[1 3 5 10 15 20];timeSteps=10;
 updatePeriods=5; referenceCount=8;
 N=numel(plans)*numel(conditions)*numel(updatePeriods)*numel(snrs)*numel(distances)*nEpisodes*timeSteps;
-proto=struct('Plan','','Condition','','SNR_dB',NaN,'Distance_m',NaN,...
+proto=struct('Seed',seed,'Plan','','Condition','','SNR_dB',NaN,'Distance_m',NaN,...
  'Episode',NaN,'TimeStep',NaN,'CalibrationAge',NaN,'ReferenceUpdated',false,...
  'UpdatePeriod',NaN,'ReferenceSNR_dB',NaN,'DriftProfile','','TrueJump',false,'TrueJumpActive',false,...
  'Fixed_m',NaN,'Periodic_m',NaN,'Predicted_m',NaN,'Adaptive_m',NaN,...
@@ -50,7 +50,7 @@ proto=struct('Plan','','Condition','','SNR_dB',NaN,'Distance_m',NaN,...
  'V9B1Switched',false,'V9B1DeltaBIC',NaN,'V9B1Correction_m',NaN, ...
  'TwoPathCandidate_m',NaN,'TwoPathGain',NaN,'TwoPathEcho',NaN,'TwoPathDelay_ns',NaN);
 rows=repmat(proto,N,1);ix=0;
-oldRng=rng;clean=onCleanup(@()rng(oldRng)); %#ok<NASGU>
+oldRng=rng;clean=onCleanup(@()rng(oldRng));
 for pi=1:numel(plans)
  plan=plans{pi};
  for ci=1:numel(conditions)
@@ -70,11 +70,14 @@ for pi=1:numel(plans)
    snr=snrs(si);
    for ep=1:nEpisodes
     % Independent replicates; keep the same target observation across estimators.
-    rng(seed+pi*1000000+ci*100000+si*10000+ep*100,'twister');
+    rng(td1.recordSeed(seed,pi,ci,si,ep,0,3,0),'twister');
     fixed=[];latest=[];previous=[];lastUpdate=0;prevTrend=[];adaptiveGate=1;innovation=NaN;jumpDetected=false;
     % Jump is strictly inside the timeline and is deliberately offset from updates.
-    jumpTime=8+mod(seed+pi*7+ci*5+si*3+ep*11,8);
+    firstJump=max(2,ceil(0.4*timeSteps));
+    lastJump=min(timeSteps-1,ceil(0.8*timeSteps));
+    jumpTime=firstJump+mod(seed+pi*7+ci*5+si*3+ep*11,lastJump-firstJump+1);
     if all(mod(jumpTime-1,updatePeriods)==0),jumpTime=jumpTime+1;end
+    assert(jumpTime>=2 && jumpTime<timeSteps,'Jump must be inside the observation timeline.');
     for t=1:timeSteps
      % Time-varying simulator truth is confined to the signal generator.
      progress=(t-1)/(timeSteps-1);
@@ -97,7 +100,7 @@ for pi=1:numel(plans)
       % Low reference SNR can make all CFO/sync estimates invalid.
       [fresh,refValidCount] = localTryReferenceCalibration( ...
          cfg,prep,rx,currentScene,refUsedSNR,referenceCount, ...
-         seed+pi*1000000+ci*100000+si*10000+ep*1000+t*1000);
+         td1.recordSeed(seed,pi,ci,si,ep,t,0,0));
       if isempty(fresh)
        if isempty(latest)
         % Explicitly logged higher-power *known-range* reference bootstrap.
@@ -106,7 +109,7 @@ for pi=1:numel(plans)
         refUsedSNR=max(refUsedSNR,20);
         [fresh,refValidCount] = localTryReferenceCalibration( ...
            cfg,prep,rx,currentScene,refUsedSNR,referenceCount, ...
-           seed+pi*1000000+ci*100000+si*10000+ep*1000+t*1000+50000);
+           td1.recordSeed(seed,pi,ci,si,ep,t,2,0));
         if isempty(fresh)
          error('V9Final:NoBootstrapReference', ...
           'No valid reference even at %.1f dB (%s, %s, target SNR %.1f dB).', ...
@@ -134,7 +137,7 @@ for pi=1:numel(plans)
      adapt=td1.predictCalibrationV9(latest,previous,age,updateEvery,0.5*adaptiveGate);
      for di=1:numel(distances)
       d=distances(di);
-      rng(seed+pi*1000000+ci*100000+si*10000+ep*1000+t*1000+100+di,'twister');
+      rng(td1.recordSeed(seed,pi,ci,si,ep,t,1,di),'twister');
       signal=td1.simulate(d,snr,currentScene,prep,false);
       feat=td1.observe(signal,rx);
       a0=td1.estimate(feat,fixed,rx);a=td1.selectConflictV8(a0,struct());

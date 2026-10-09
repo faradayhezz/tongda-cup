@@ -30,7 +30,7 @@ proto=struct('Plan','','Condition','','SNR_dB',NaN,'Distance_m',NaN,...
  'FixedUsePbr',false,'PeriodicUsePbr',false,'PredictedUsePbr',false,...
  'PeriodicCalibrationValid',false,'PredictedCalibrationValid',false);
 rows=repmat(proto,N,1);ix=0;
-oldRng=rng;clean=onCleanup(@()rng(oldRng)); %#ok<NASGU>
+oldRng=rng;clean=onCleanup(@()rng(oldRng));
 for pi=1:numel(plans)
  plan=plans{pi};
  for ci=1:numel(conditions)
@@ -47,7 +47,7 @@ for pi=1:numel(plans)
    snr=snrs(si);
    for ep=1:nEpisodes
     % Independent replicates; keep the same target observation across estimators.
-    rng(seed+pi*1000000+ci*100000+si*10000+ep*100,'twister');
+    rng(td1.recordSeed(seed,pi,ci,si,ep,0,3,0),'twister');
     fixed=[];latest=[];previous=[];lastUpdate=0;
     for t=1:timeSteps
      % Time-varying simulator truth is confined to the signal generator.

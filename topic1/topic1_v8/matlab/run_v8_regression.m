@@ -23,7 +23,7 @@ template=struct('Scenario','','Distance_m',NaN,'SNR_dB',NaN,'Trial',NaN,...
  'PBRCoherence',NaN,'InnovationSigma',NaN,...
  'FusionValid',false);
 records=repmat(template,n,1);
-old=rng; clean=onCleanup(@()rng(old)); %#ok<NASGU>
+old=rng; clean=onCleanup(@()rng(old));
 ix=0;
 for s=1:numel(cfg.scenarios)
  scene=cfg.scenarios(s);
