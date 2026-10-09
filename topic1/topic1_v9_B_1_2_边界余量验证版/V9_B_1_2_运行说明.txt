@@ -1,0 +1,32 @@
+通达杯赛题一 V9_B_1_2：搜索上限余量对照实验
+
+目标：保持比赛目标距离 1–20 m 不变，比较内部 PBR 候选搜索上限 20、22、40 m。
+此版不修改 RTT/PBR 测量公式、V8 冲突决策、动态校准及 V9_B_1 双径保护策略。
+22 m 只是预注册的实验候选，不是已经得到最佳验证的参数。
+
+在 matlab 文件夹运行：
+快速试验（每种上限 1 个 episode）：
+ a=run_v9_B_1_2_verify(1,20281209,40,'targeted');
+ b=run_v9_B_1_2_verify(1,20281209,20,'targeted');
+ c=run_v9_B_1_2_verify(1,20281209,22,'targeted');
+ report=compare_v9_B_1_2('targeted');
+
+确认后运行完整版（每种上限 3 个 episode）：
+ a=run_v9_B_1_2_verify(3,20281209,40,'full');
+ b=run_v9_B_1_2_verify(3,20281209,20,'full');
+ c=run_v9_B_1_2_verify(3,20281209,22,'full');
+ report=compare_v9_B_1_2('full');
+
+输出文件：results/v9_B_1_2_compare_targeted.csv、results/v9_B_1_2_compare_full.csv
+每个上限还会生成独立的 v9_B_1_2_trials.csv、v9_B_1_2_by_distance_snr.csv 等。
+
+必须重点查看：
+ 64 MHz、1 m 强反射两组：新范围是否继续消除 PBR 双候选、恢复 V8 切换。
+ 64 MHz、20 m 强反射及强反射+漂移：22 m 是否降低边界截断与错误 RTT 回退。
+ 32 MHz、LOS、轻度多径与所有 SNR：是否发生回归退化。
+ 统计 PBR 候选数、距离至内部上界差值、近边界标记、V8 选择次数、RMSE/P95。
+
+注意：内部搜索余量允许估计值略超出 20 m，是数值估计策略；不意味着比赛目标测距范围变更。
+若估计值超出比赛规定的 1–20 m，可在应用层标记超范围/低可信度，不应偷偷截断后算作准确测量。
+本实验不利用仿真距离真值进行任何在线决策；真值仅用于事后评价。
+尚未在 MATLAB 实际运行；请先用 targeted 快速试验检查。

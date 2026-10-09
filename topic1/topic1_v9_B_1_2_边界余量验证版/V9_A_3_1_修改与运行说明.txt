@@ -1,0 +1,11 @@
+通达杯赛题一 V9_A_3_1：跳变真值诊断修复版
+
+问题来源：A3 源码中模拟真实跳变使用 jumpTime (t >= jumpTime)，但导出 TrueJump 却写死 t==11。
+修复：TrueJump 改为 t==jumpTime；新增 TrueJumpActive 表示 t>=jumpTime。
+保留：同一场景、相同种子和输入下，四种测距算法的输入及参数不变，随机跳变产生逻辑也不变。
+功能验证：MATLAB 中先执行 r=run_v9_A_3_1_stress(1,20280109); 再执行 validate_v9_A_3_1。
+完整实验：r=run_v9_A_3_1_stress(3,20280109); 然后执行 validate_v9_A_3_1。
+输出：matlab/results/v9_A_3_1_diagnostic/v9_A_3_1_trials.csv、v9_A_3_1_summary.csv、v9_A_3_1_notes.txt。
+验证脚本检查：跳变标签、活跃状态、真实时延和时钟漂移、每条重复试验恰好一个跳变起点。
+注意：非跳变场景 JumpTime 虽可计算但只是未使用的占位量，不能视作发生跳变；应以 DriftProfile 和 TrueJump 为准。
+说明：尚未实际在 MATLAB 环境中数值运行，需用户运行验证。软件仿真假设理想相干频率切换。

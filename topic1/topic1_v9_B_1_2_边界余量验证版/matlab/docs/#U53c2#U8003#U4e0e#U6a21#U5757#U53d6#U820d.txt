@@ -1,0 +1,55 @@
+题1代码 v2：参考与模块取舍
+日期：2026-10-09
+
+一、实现与使用原则
+本代码面向现机 MATLAB R2023a、无硬件条件，核心算法用基础 MATLAB 独立实现。下列资料用于核对公式、信号处理流程及接口设计；没有整包复制、安装依赖或运行这些第三方源码。独立实现不等于完整实现 Bluetooth 协议，所有当前输出均为 Simulation only。PlutoSDR 空口收发、硬件时钟与相位校准仍需实机验证。
+
+二、赛题要求与当前代码范围
+依据交接目录“赛事资料”内 2026-09-07 盖章赛题通告（题1，第2-7页，扫描件经逐页视觉核对）：
+1. 构建 Initiator / Reflector 双向测距；生成 BLE 风格 CS SYNC 与 CS Tone；信道加入距离相关时延、AWGN，并分析 CFO、相位噪声及多径影响。
+2. RTT：检测同步、TOA 估计、扣除 Reflector 应答时间的往返时延、传播速度换算。PBR：多个载频的相位估计及距离估计。
+3. 融合：利用 RTT 的粗范围解决 PBR 相位模糊，或约束搜索空间、筛选/加权候选。不能仅因输出接近 PBR 就宣称已证明融合收益。
+4. 测距范围为 1-20 m；推荐测试距离 1、3、5、10、15、20 m。需给出不同距离 MAE/RMSE、SNR 性能、轻度多径鲁棒性及多频一致性。题目没有给定硬性的数值精度门槛。
+5. 初赛要求 MATLAB 源代码和支持信号模型、算法实现、测试结果、误差分析的技术材料。PlutoSDR OTA 测距及实时收发明确列在决赛阶段。没有硬件时不能将仿真、采集接口或计划标为 OTA 已完成。
+6. 尽管题名含“融合定位”，第7页将多节点扩展（定位系统）列为加分方向；二维定位不是初赛必需功能。当前优先完成双向测距闭环。
+软件版本：6月30日正式通知写初赛 Matlab 2018b；9月7日较晚盖章通告第1页又写“原则上不限定”软硬件平台，可自主选择 MATLAB/Simulink、GNU Radio、Python 等。当前在 R2023a 验证，并尽量保持基础语法兼容；未运行 R2018b 的代码不能标为已通过该版本验证。
+
+三、优先参考：Zephyr 官方 PBR / RTT 算法
+仓库：https://github.com/zephyrproject-rtos/zephyr
+模块：https://github.com/zephyrproject-rtos/zephyr/blob/main/samples/bluetooth/channel_sounding/src/distance_estimation.c
+说明：https://github.com/zephyrproject-rtos/zephyr/blob/main/samples/bluetooth/channel_sounding/README.rst
+许可：https://github.com/zephyrproject-rtos/zephyr/blob/main/LICENSE
+已核实文件 SPDX 与根许可为 Apache-2.0。模块函数清楚，包含双向 IQ 复乘、按频率排序、相位展开、线性回归及 RTT。其往返相位斜率公式为 d = -c*slope/(4*pi)；以 Hz 为横轴时直接得到米，以 MHz 为横轴时还需除以 10^6。正负号取决于收发与相位约定，须用无噪声距离自检核实。
+借鉴：双向相位组合抵消两机初始相位差；坏 tone 筛除；区分传播时间与 Reflector 应答时间；相位斜率作为 PBR 基线。
+不整包复用：原模块为 C/Zephyr，依赖蓝牙 CS 控制器数据结构，不能接收自定义 MATLAB IQ 直接运行。源码 RTT 移动均值使用循环 i+1 作分母，失败样本时不能将它当有效样本数；需独立处理有效样本计数、无效返回和频率退化。
+
+四、GFSK 与同步 / CFO 参考
+GNU Radio 官方仓库：https://github.com/gnuradio/gnuradio
+模块：https://github.com/gnuradio/gnuradio/blob/main/gr-digital/python/digital/gfsk.py
+许可：https://github.com/gnuradio/gnuradio/blob/main/COPYING
+已核实 gfsk.py 为 GPL-3.0-or-later。借鉴成熟的 bits→NRZ +/-1→Gaussian 脉冲成形→频率调制流程，以及相邻复样本相位差 FM 解调和符号同步的接收链。当前 MATLAB 核心不导入该源码；采用标准数学关系独立实现，不引入 GNU Radio/Python 编译块。该模块默认 BT=0.35，不能原样当 BLE CS 的 BT=0.5。
+
+MATLAB 作者仓库：https://github.com/MeowLucian/SDR_Matlab_OFDM_802.11a
+模块：https://github.com/MeowLucian/SDR_Matlab_OFDM_802.11a/blob/master/OFDM_RX.m
+许可：https://github.com/MeowLucian/SDR_Matlab_OFDM_802.11a/blob/master/LICENSE
+已核实 MIT。可参考重复前导的粗/细 CFO 思路：对相隔 D 样本的重复段作复相关，将角度除以 2*pi*D*Ts，并用负频率复指数补偿。代码结构短、注释分阶段，但维护日期未能核实。
+排除整包：这是 802.11a OFDM 而非 BLE，帧长/阈值硬编码；README 指定 R2016a 和 Zynq Radio 支持包，代码使用 rcosdesign、pskdemod、pwelch 等工具箱函数。检测片段还使用 complex(x) 而非 conj(x)，不能直接复制为正确的延迟自相关。CFO 正负号及捕获范围须通过独立测试确认。
+
+五、Pluto 采集接口参考及排除项
+ADI 官方仓库：https://github.com/analogdevicesinc/pyadi-iio
+示例：https://github.com/analogdevicesinc/pyadi-iio/blob/main/examples/pluto.py
+接口：https://github.com/analogdevicesinc/pyadi-iio/blob/main/adi/ad936x.py
+许可：https://github.com/analogdevicesinc/pyadi-iio/blob/main/LICENSE
+依赖：https://github.com/analogdevicesinc/pyadi-iio/blob/main/pyproject.toml
+已核实许可为 ADI BSD / ADIBSD，附连接、运行或加载到 ADI 组件的条款。官方仓库有测试与硬件 CI；Python>=3.8、NumPy>=1.20、pylibiio>=0.25，示例另需 SciPy/Matplotlib。可借鉴 LO、采样率、RF 带宽、增益、cyclic buffer、IQ 收发等接口字段，让采集与算法分离。
+当前不引入 Python/libiio。示例的普通 rx()/tx() 调用不能证明精确 RTT 时间戳、两机同步或 PBR 相位校准；主机 USB 调度时间不能充当传播时间。此参考保留给硬件阶段。
+ADI TransceiverToolbox 排除依据：https://github.com/analogdevicesinc/TransceiverToolbox
+其当前 README 列 R2023b（修复）与 R2025b（新功能）维护，许可同样有 ADI 组件条款，且涉及 libiio、硬件工具链；不适合作为当前 R2023a 无硬件核心依赖。
+
+六、MathWorks 官方 Channel Sounding 版本边界
+RTT 示例：https://www.mathworks.com/help/bluetooth/ug/estimate-distance-between-bluetooth-le-devices-by-using-channel-sounding.html
+PBR 示例：https://www.mathworks.com/help/bluetooth/ug/estimate-distance-between-bluetooth-le-devices-by-using-channel-sounding-and-phase-based-ranging.html
+版本索引：https://www.mathworks.com/help/bluetooth/localization.html
+已核实 RTT 示例标 Since R2024a，使用 Bluetooth Toolbox 与 DSP System Toolbox；PBR 示例标 Since R2024b；bleCSWaveform 与 bleCSConfig 均标 Since R2024b。R2023a 不能直接使用这些较新 CS API。当前 RTT 网页已更新为较新 API，页面起始版本不代表页面现有源码能原样运行于 R2024a。
+可参考公式：RTT = (TOA_I-TOD_I)-(TOD_R-TOA_R)，d = c*RTT/2；PBR 双向相位相加，再按频率变化求往返相位斜率。不能将两频点相位差的模糊解当绝对距离，也不能直接复制示例工具箱调用到本代码。
+本包分别独立实现波形、信道、同步/CFO、双向 PBR/RTT、融合和统计；以可复现自检与仿真证据说明范围，维护出处记录，但不把参考作者的性能数字当本项目结果。

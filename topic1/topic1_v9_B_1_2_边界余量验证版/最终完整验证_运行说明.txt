@@ -1,0 +1,15 @@
+通达杯赛题一 V9_B_1 最终完整验证（不改算法）
+=====================================
+在 MATLAB 中将当前文件夹设为本工程 matlab 目录。
+快速烟测：r = run_v9_B_1_final_verify(1,20281209);
+验证数据：validate_v9_B_1_final;
+完整版：r = run_v9_B_1_final_verify(3,20281209);
+再次验证：validate_v9_B_1_final;
+
+测试设计：2 种频率跨度（32、64 MHz）；9 个信道场景；距离 1/3/5/10/15/20m；SNR 0/10/20/30dB；每组 10 时间步。
+快速版 = 2*9*6*4*10*1=4320 条；完整版 12960 条。
+原 V9_B_1 测距和决策函数完全保留；只新增测试入口和分组报告。
+输出目录 matlab/results/v9_B_1_final_verify/
+主数据 v9_B_1_final_trials.csv、场景汇总 v9_B_1_final_summary.csv、细分结果 v9_B_1_final_by_distance_snr.csv。
+注意：这是理想跳频校准的 MATLAB 软件仿真，未包含 PlutoSDR 实测、参考校准时间开销。
+结果仅供研究评价；请特别检查最大误差、P95、>1m比例、非有限输出和 V8/V9_B_1 配对比较。

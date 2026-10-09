@@ -1,0 +1,23 @@
+V9_B_1_2 连续距离扫描与独立随机种子验证（算法冻结）
+
+使用 MATLAB 打开 matlab 文件夹并设为当前目录。
+运行一键脚本：
+    report = run_v9_B_1_2_final_scan();
+
+每个种子 4,800 条：20 个距离 (1:20 m) × 4 SNR × 2 跨度 × 3 场景 × 10 时间步。
+三个新种子合计 14,400 条。搜索上限固定为 22 m。
+场景：LOS_stable、light_stable、strong_stable。
+独立种子：20281219、20290107、20290211。
+
+先单独试跑一个种子（较快）：
+    t = run_v9_B_1_2_distance_scan(1,20281219);
+然后执行剩余的种子及报告（会重跑首个种子）：
+    report = run_v9_B_1_2_final_scan();
+
+最终报告：matlab/results/v9_B_1_2_final_scan_report/
+seed_summary.csv：每种子结果
+scan_by_distance.csv：距离 × 场景 × 带宽
+scan_by_distance_snr.csv：距离 × SNR × 场景 × 带宽
+scan_rmse_by_distance.png：距离误差曲线
+
+注意：这里的三个场景不是此前九种场景的替代品。种子测试是同参数不同随机数的独立复测。仅为 MATLAB 仿真，不代表 PlutoSDR 实测。
